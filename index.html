@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Fájl Kiíratása</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Felhasználók Listája</h1>
+    <ul id="felhasznalok"></ul>
+
+    <h2>JSON Adatok (szép formázásban)</h2>
+    <pre id="json-kimenet"></pre> <!-- Ide írjuk ki a JSON adatokat -->
+
+    <script>
+        // JSON fájl beolvasása
+        fetch('adatok.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Hiba a fájl betöltésekor');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Felhasználók megjelenítése
+                megjelenitFelhasznalok(data.felhasznalok);
+
+                // JSON adatok kiíratása
+                document.getElementById('json-kimenet').textContent = JSON.stringify(data, null, 4); // Szép formázás
+            })
+            .catch(error => console.error('Hiba:', error));
+
+        // Felhasználók megjelenítése
+        function megjelenitFelhasznalok(felhasznalok) {
+            const felhasznalokLista = document.getElementById('felhasznalok');
+            felhasznalokLista.innerHTML = ""; // Tisztítjuk a meglévő listát
+
+            felhasznalok.forEach(felhasznalo => {
+                const listaElem = document.createElement('li');
+                listaElem.textContent = `${felhasznalo.nev}, Kor: ${felhasznalo.kor}`;
+                felhasznalokLista.appendChild(listaElem);
+            });
+        }
+    </script>
+
+</body>
+</html>
